@@ -33,7 +33,7 @@ jobs:
           images: ${{ secrets.DOCKERHUB_USERNAME }}/blackd
           tag-custom: |
             ${{ needs.black_version.outputs.version }}
-          tag-latest: true
+            latest
           tag-custom-only: true
           label-custom: |
             org.opencontainers.image.title=blackd
