@@ -17,6 +17,7 @@ Supported platform: `linux/amd64`, `linux/arm64/v8`, `linux/386`, `linux/arm/v7`
 ## Command
 
 Default Entrypoint of image is `blackd`.
+
 And Command are `--bind-host 0.0.0.0 --bind-port 80`.
 
 ## How to run
