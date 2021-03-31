@@ -31,11 +31,10 @@ jobs:
         uses: crazy-max/ghaction-docker-meta@v2.1.1
         with:
           images: ${{ secrets.DOCKERHUB_USERNAME }}/blackd
-          tag: |
+          tags: |
             ${{ needs.black_version.outputs.version }}
             latest
-          tag-custom-only: true
-          label-custom: |
+          labels: |
             org.opencontainers.image.title=blackd
             org.opencontainers.image.version=${{ needs.black_version.outputs.version }}
       - name: Set up QEMU
