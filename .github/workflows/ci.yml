@@ -31,7 +31,7 @@ jobs:
         uses: crazy-max/ghaction-docker-meta@v2.1.1
         with:
           images: ${{ secrets.DOCKERHUB_USERNAME }}/blackd
-          tag-custom: |
+          tag: |
             ${{ needs.black_version.outputs.version }}
             latest
           tag-custom-only: true
