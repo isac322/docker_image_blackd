@@ -28,9 +28,11 @@ jobs:
       - uses: actions/checkout@v2
       - name: Docker meta
         id: docker_meta
-        uses: crazy-max/ghaction-docker-meta@v2.1.1
+        uses: crazy-max/ghaction-docker-meta@v2.2.1
         with:
           images: ${{ secrets.DOCKERHUB_USERNAME }}/blackd
+          flavor: |
+            latest=false
           tags: |
             ${{ needs.black_version.outputs.version }}
             latest
