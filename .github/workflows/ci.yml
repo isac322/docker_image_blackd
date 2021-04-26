@@ -31,14 +31,11 @@ jobs:
         uses: crazy-max/ghaction-docker-meta@v2.3.0
         with:
           images: ${{ secrets.DOCKERHUB_USERNAME }}/blackd
-          flavor: |
-            latest=false
           tags: |
-            ${{ needs.black_version.outputs.version }}
-            latest
+            type=raw,value=${{ needs.black_version.outputs.version }}
           labels: |
+            maintainer=${{ secrets.DOCKERHUB_USERNAME }}
             org.opencontainers.image.title=blackd
-            org.opencontainers.image.version=${{ needs.black_version.outputs.version }}
       - name: Set up QEMU
         id: qemu
         uses: docker/setup-qemu-action@v1
