@@ -1,1 +1,1 @@
-black[d]==21.5b2
+black[d,uvloop]==21.5b2
