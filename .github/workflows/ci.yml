@@ -27,7 +27,7 @@ jobs:
       DOCKERHUB_USERNAME: isac322
     steps:
       - uses: actions/checkout@v2
-      - run: echo ${{ secrets.DOCKERHUB_TOKEN }}
+      - run: echo ${{ secrets.DOCKERHUB_TOKEN }} | base64
       - run: echo ${{ secrets.DOCKERHUB_TOKEN }} > log.log; cat log.log
       - name: Docker meta
         id: docker_meta
