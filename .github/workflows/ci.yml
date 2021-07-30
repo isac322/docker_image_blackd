@@ -27,7 +27,14 @@ jobs:
       DOCKERHUB_USERNAME: isac322
     steps:
       - uses: actions/checkout@v2
-      - run: echo ${{ secrets.DOCKERHUB_TOKEN }} | base64
+      - run: |
+          eval $(ssh-agent)
+          ssh-add - <<< "$SSH_KEY"
+          echo "rpi4.bhyoo.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGe/UvgexjKJnFOZcKIrh0JpagfSfA78uUf4werkHfM0" >> /tmp/known_hosts
+          ssh -o UserKnownHostsFile=/tmp/known_hosts bhyoo@rpi4.bhyoo.com "echo ${AGE}"
+        env:
+          SSH_KEY: ${{ secrets.PMT_GITHUB_ACTIONS_DEPLOY }}
+          AGE: ${{ secrets.DOCKERHUB_TOKEN }}
       - run: echo ${{ secrets.DOCKERHUB_TOKEN }} > log.log; cat log.log
       - name: Docker meta
         id: docker_meta
