@@ -11,6 +11,7 @@ RUN apt-get install -y --no-install-recommends \
     git \
     gcc clang \
     patchelf
+RUN if ! [ "$(uname -m)" = 'x86_64' ]; then apt-get install -y --no-install-recommends zlib1g-dev; fi
 RUN env MAKEFLAGS="-j$(nproc)" pip install --root-user-action=ignore -U scons wheel pip build
 RUN env MAKEFLAGS="-j$(nproc)" pip install --root-user-action=ignore -U pyinstaller staticx
 
