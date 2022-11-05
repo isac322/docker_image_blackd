@@ -58,5 +58,4 @@ jobs:
         with:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-          repository: ${{ env.DOCKERHUB_USERNAME }}/blackd
           short-description: ${{ github.event.repository.description }}
