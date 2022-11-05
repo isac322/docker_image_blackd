@@ -5,7 +5,7 @@
 [3]: https://github.com/isac322/docker_image_blackd
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/isac322/blackd?logo=docker&style=flat-square)][1]
-[![Docker Image Size (tag)](https://img.shields.io/docker/image-size/isac322/blackd/latest?logo=docker&style=flat-square)][1]
+[![Docker Image Size (tag)](https://img.shields.io/docker/image-size/isac322/blackd?logo=docker&style=flat-square)][1]
 [![PyPI](https://img.shields.io/pypi/v/black?label=black&logo=python&style=flat-square)][2]
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/black?logo=python&style=flat-square)][2]
 [![GitHub last commit (branch)](https://img.shields.io/github/last-commit/isac322/docker_image_blackd/master?logo=github&style=flat-square)][3]
