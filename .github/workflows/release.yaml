@@ -1,0 +1,29 @@
+---
+name: release
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - Dockerfile
+      - requirements.txt
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Get black version
+        id: black_version
+        run: |
+          VERSION=$(python -c "from pkg_resources import parse_requirements; print(next(filter(lambda r: r.name == 'black', parse_requirements(open('requirements.txt').read()))).specs[0][1])")
+          echo $VERSION
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+
+      - uses: marvinpinto/action-automatic-releases@v1.2.1
+        with:
+          repo_token: "${{ secrets.GHA_PAT }}"
+          prerelease: false
+          automatic_release_tag: ${{ steps.black_version.outputs.version }}
