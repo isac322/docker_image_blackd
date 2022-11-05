@@ -8,7 +8,9 @@
 ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/isac322/docker_image_blackd/ci/master?logo=github&style=flat-square)
 ![Dependabpt Status](https://flat.badgen.net/github/dependabot/isac322/docker_image_blackd?icon=github)
 
-Supported platform: `linux/amd64`, `linux/arm64/v8`, `linux/386`, `linux/arm/v7`
+Supported platform: `linux/amd64`, `linux/arm64`, `linux/arm/v7`
+
+Based on [distroless](https://github.com/GoogleContainerTools/distroless) and compiled with mypyc.
 
 ## Tag format
 
