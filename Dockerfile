@@ -23,7 +23,7 @@ RUN env \
       HATCH_BUILD_HOOKS_ENABLE=1 HATCH_BUILD_CLEAN_HOOKS_AFTER=1 \
       MYPYC_OPT_LEVEL=3 MYPYC_DEBUG_LEVEL=0 AIOHTTP_NO_EXTENSIONS=1 CC=clang \
       python -m build --wheel
-RUN env MAKEFLAGS="-j$(nproc)" pip install --compile "$(ls dist/*.whl)"[d,uvloop] 'click<8.1.0'
+RUN env MAKEFLAGS="-j$(nproc)" pip install --compile "$(ls dist/*.whl)"[d,uvloop]
 RUN env MAKEFLAGS="-j$(nproc)" \
     pyinstaller \
       --clean \
