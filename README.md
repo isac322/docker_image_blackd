@@ -1,14 +1,22 @@
 # Docker image preinstalled the Python package `black[d]`
 
-![Docker Pulls](https://img.shields.io/docker/pulls/isac322/blackd?logo=docker&style=flat-square)
-![Docker Image Size (tag)](https://img.shields.io/docker/image-size/isac322/blackd/latest?logo=docker&style=flat-square)
-![PyPI](https://img.shields.io/pypi/v/black?label=black&logo=python&style=flat-square)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/black?logo=python&style=flat-square)
-![GitHub last commit (branch)](https://img.shields.io/github/last-commit/isac322/docker_image_blackd/master?logo=github&style=flat-square)
-![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/isac322/docker_image_blackd/ci/master?logo=github&style=flat-square)
-![Dependabpt Status](https://flat.badgen.net/github/dependabot/isac322/docker_image_blackd?icon=github)
+[1]: https://hub.docker.com/r/isac322/blackd
+[2]: https://pypi.org/project/black/
+[3]: https://github.com/isac322/docker_image_blackd
 
-Supported platform: `linux/amd64`, `linux/arm64/v8`, `linux/386`, `linux/arm/v7`
+[![Docker Pulls](https://img.shields.io/docker/pulls/isac322/blackd?logo=docker&style=flat-square)][1]
+[![Docker Image Size (tag)](https://img.shields.io/docker/image-size/isac322/blackd/latest?logo=docker&style=flat-square)][1]
+[![PyPI](https://img.shields.io/pypi/v/black?label=black&logo=python&style=flat-square)][2]
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/black?logo=python&style=flat-square)][2]
+[![GitHub last commit (branch)](https://img.shields.io/github/last-commit/isac322/docker_image_blackd/master?logo=github&style=flat-square)][3]
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/isac322/docker_image_blackd/publish?logo=github&style=flat-square)][3]
+[![Dependabpt Status](https://flat.badgen.net/github/dependabot/isac322/docker_image_blackd?icon=github)][3]
+
+> ### Images automatically follow upstream via dependabot.
+
+Supported platform: `linux/amd64`, `linux/arm64`, `linux/arm/v7`
+
+Based on [distroless](https://github.com/GoogleContainerTools/distroless) and compiled with mypyc.
 
 ## Tag format
 

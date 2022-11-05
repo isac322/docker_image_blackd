@@ -1,0 +1,61 @@
+---
+name: publish
+
+on:
+  release:
+    types: [released]
+
+jobs:
+  build_image:
+    runs-on: ubuntu-latest
+    env:
+      PLATFORMS: linux/amd64,linux/arm64,linux/arm/v7
+      DOCKERHUB_USERNAME: isac322
+    steps:
+      - name: Docker meta
+        id: docker_meta
+        uses: docker/metadata-action@v4
+        with:
+          flavor: latest=false
+          images: ${{ env.DOCKERHUB_USERNAME }}/blackd
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+          labels: |
+            maintainer=${{ env.DOCKERHUB_USERNAME }}
+            org.opencontainers.image.title=blackd
+            org.opencontainers.image.source=https://github.com/psf/black
+            org.opencontainers.image.documentation=https://black.readthedocs.io
+      - name: Set up QEMU
+        id: qemu
+        uses: docker/setup-qemu-action@v2
+        with:
+          platforms: ${{ env.PLATFORMS }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        with:
+          platforms: ${{ env.PLATFORMS }}
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build
+        id: docker_build
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          build-args: |
+            VERSION=${{ steps.docker_meta.outputs.version }}
+          platforms: ${{ env.PLATFORMS }}
+          tags: ${{ steps.docker_meta.outputs.tags }}
+          labels: ${{ steps.docker_meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Update repo description
+        uses: peter-evans/dockerhub-description@v3
+        with:
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          short-description: ${{ github.event.repository.description }}
