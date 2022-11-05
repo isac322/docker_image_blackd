@@ -1,11 +1,14 @@
 version: 2
 updates:
-  # Maintain dependencies for GitHub Actions
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: "pip"
+    directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
-  - package-ecosystem: "pip"
-    directory: "/"
+  - package-ecosystem: "github-actions"
+    directory: "/" # Location of package manifests
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
