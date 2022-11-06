@@ -20,5 +20,5 @@ jobs:
         with:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          readme-filepath: /README.md
+          readme-filepath: README.md
           short-description: ${{ github.event.repository.description }}
