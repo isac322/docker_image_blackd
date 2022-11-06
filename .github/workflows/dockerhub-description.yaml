@@ -21,4 +21,5 @@ jobs:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           readme-filepath: README.md
+          repository: ${{ env.DOCKERHUB_USERNAME }}/blackd
           short-description: ${{ github.event.repository.description }}
