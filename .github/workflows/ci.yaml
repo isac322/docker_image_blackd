@@ -7,7 +7,7 @@ jobs:
   build_image:
     runs-on: ubuntu-latest
     env:
-      PLATFORMS: linux/amd64,linux/arm64/v8,linux/arm/v7,linux/arm/v5,linux/ppc64le,linux/s390x
+      PLATFORMS: linux/amd64,linux/arm64/v8,linux/arm/v7,linux/arm,linux/ppc64le,linux/s390x
     steps:
       - uses: actions/checkout@v3
         with:
