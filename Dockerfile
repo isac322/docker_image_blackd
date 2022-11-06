@@ -18,6 +18,8 @@ RUN env MAKEFLAGS="-j$(nproc)" pip install --root-user-action=ignore -U pyinstal
 RUN git clone --depth 1 -b ${VERSION} https://github.com/psf/black.git
 WORKDIR black
 
+# FIXME: https://github.com/psf/black/issues/3376
+RUN if [ "$(getconf LONG_BIT)" -ne 64 ]; then sed -iE 's/mypy==0.971/mypy==0.981/' pyproject.toml; fi
 RUN env \
       MAKEFLAGS="-j$(nproc)" \
       HATCH_BUILD_HOOKS_ENABLE=1 HATCH_BUILD_CLEAN_HOOKS_AFTER=1 \
