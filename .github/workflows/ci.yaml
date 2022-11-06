@@ -7,7 +7,7 @@ jobs:
   build_image:
     runs-on: ubuntu-latest
     env:
-      PLATFORMS: linux/amd64,linux/arm64,linux/arm/v7
+      PLATFORMS: linux/amd64,linux/arm64/v8,linux/arm/v7,linux/arm,linux/ppc64le,linux/s390x
     steps:
       - uses: actions/checkout@v3
         with:
@@ -20,6 +20,7 @@ jobs:
           files: |
             Dockerfile
             requirements.txt
+            .github/workflows/ci.yaml
 
       - name: Get black version
         id: black_version
