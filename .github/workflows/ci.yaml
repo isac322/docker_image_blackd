@@ -20,7 +20,6 @@ jobs:
           files: |
             Dockerfile
             requirements.txt
-            .github/workflows/ci.yaml
 
       - name: Get black version
         id: black_version
@@ -51,3 +50,4 @@ jobs:
             VERSION=${{ steps.black_version.outputs.version }}
           platforms: ${{ env.PLATFORMS }}
           cache-from: type=gha
+          cache-to: type=gha,mode=max
