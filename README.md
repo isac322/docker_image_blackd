@@ -14,7 +14,7 @@
 
 > ### Images automatically follow upstream via dependabot.
 
-Supported platform: `linux/amd64`, `linux/arm64/8`, `linux/arm/v7`, `linux/arm`, `linux/ppc64le`, `linux/s390x`
+Supported platform: `linux/amd64`, `linux/arm64/8`, `linux/arm/v7`, `linux/ppc64le`, `linux/s390x`
 
 Based on [distroless](https://github.com/GoogleContainerTools/distroless) and compiled with mypyc.
 
