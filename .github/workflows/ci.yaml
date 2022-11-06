@@ -20,6 +20,7 @@ jobs:
           files: |
             Dockerfile
             requirements.txt
+            .github/workflows/ci.yaml
 
       - name: Get black version
         id: black_version
