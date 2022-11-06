@@ -9,7 +9,7 @@ jobs:
   build_image:
     runs-on: ubuntu-latest
     env:
-      PLATFORMS: linux/amd64,linux/arm64/v8,linux/arm/v7,linux/arm,linux/ppc64le,linux/s390x
+      PLATFORMS: linux/amd64,linux/arm64/v8,linux/arm/v7,linux/ppc64le,linux/s390x
       DOCKERHUB_USERNAME: isac322
     steps:
       - name: Docker meta
