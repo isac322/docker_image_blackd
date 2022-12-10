@@ -17,6 +17,8 @@ RUN env MAKEFLAGS="-j$(nproc)" pip install --root-user-action=ignore -U pyinstal
 
 RUN git clone --depth 1 -b ${VERSION} https://github.com/psf/black.git
 WORKDIR black
+# FIXME: https://github.com/psf/black/pull/3416
+RUN sed -iE 's/gitignore: Optional\[PathSpec\] = None/gitignore: Optional[Dict[Path, PathSpec]] = None/' src/black/__init__.py
 
 # FIXME: https://github.com/psf/black/issues/3376
 RUN if [ "$(getconf LONG_BIT)" -ne 64 ]; then sed -iE 's/mypy==0.971/mypy==0.981/' pyproject.toml; fi
@@ -40,7 +42,7 @@ RUN env MAKEFLAGS="-j$(nproc)" staticx --strip dist/blackd dist/blackd_static
 FROM gcr.io/distroless/base-debian11
 MAINTAINER 'Byeonghoon Isac Yoo <bhyoo@bhyoo.com>'
 
-COPY --link=true --from=builder /black/dist/blackd_static /usr/local/bin/blackd
+COPY --link --from=builder /black/dist/blackd_static /usr/local/bin/blackd
 EXPOSE 80
 ENTRYPOINT ["/usr/local/bin/blackd"]
 CMD ["--bind-host", "0.0.0.0", "--bind-port", "80"]
