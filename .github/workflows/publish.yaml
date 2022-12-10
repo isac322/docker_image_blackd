@@ -50,7 +50,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: /tmp/buildkit-cache/buildkit-state.tar
-          key: ${{ runner.os }}-buildkit-${{ github.sha }}
+          key: ${{ runner.os }}-buildkit-${{ steps.docker_meta.outputs.version }}
           restore-keys: |
             ${{ runner.os }}-buildkit-
 
