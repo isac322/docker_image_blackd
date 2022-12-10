@@ -9,24 +9,38 @@ RUN printf 'Dir::Cache::pkgcache "";\nDir::Cache::srcpkgcache "";' > /etc/apt/ap
 RUN apt-get update -qq
 RUN apt-get install -y --no-install-recommends \
     git \
-    gcc clang \
+    gcc clang ccache \
     patchelf
 RUN if ! [ "$(uname -m)" = 'x86_64' ]; then apt-get install -y --no-install-recommends zlib1g-dev make; fi
-RUN env MAKEFLAGS="-j$(nproc)" pip install --root-user-action=ignore -U scons wheel pip build
-RUN env MAKEFLAGS="-j$(nproc)" pip install --root-user-action=ignore -U pyinstaller staticx
+RUN --mount=type=cache,target=/root/.cache/pip,sharing=private \
+    env MAKEFLAGS="-j$(nproc)" pip install --root-user-action=ignore -U scons wheel pip build
+RUN --mount=type=cache,target=/root/.cache/pip,sharing=private \
+    --mount=type=cache,target=/root/.cache/ccache,sharing=private \
+    env MAKEFLAGS="-j$(nproc)" CC='ccache gcc' \
+      pip install --root-user-action=ignore -U pyinstaller staticx
 
 RUN git clone --depth 1 -b ${VERSION} https://github.com/psf/black.git
 WORKDIR black
+# FIXME: https://github.com/psf/black/pull/3416
+RUN sed -iE 's/gitignore: Optional\[PathSpec\] = None/gitignore: Optional[Dict[Path, PathSpec]] = None/' src/black/__init__.py
 
 # FIXME: https://github.com/psf/black/issues/3376
 RUN if [ "$(getconf LONG_BIT)" -ne 64 ]; then sed -iE 's/mypy==0.971/mypy==0.981/' pyproject.toml; fi
-RUN env \
+RUN --mount=type=cache,target=/root/.cache/pip,sharing=private \
+    --mount=type=cache,target=/root/.cache/ccache,sharing=private \
+    --mount=type=cache,target=/black/.mypy_cache,sharing=private \
+    env \
       MAKEFLAGS="-j$(nproc)" \
-      HATCH_BUILD_HOOKS_ENABLE=1 HATCH_BUILD_CLEAN_HOOKS_AFTER=1 \
-      MYPYC_OPT_LEVEL=3 MYPYC_DEBUG_LEVEL=0 AIOHTTP_NO_EXTENSIONS=1 CC=clang \
+      HATCH_BUILD_HOOKS_ENABLE=1 \
+      MYPYC_OPT_LEVEL=3 MYPYC_DEBUG_LEVEL=0 CC='ccache clang' \
       python -m build --wheel
-RUN env MAKEFLAGS="-j$(nproc)" pip install --compile "$(ls dist/*.whl)"[d,uvloop]
-RUN env MAKEFLAGS="-j$(nproc)" \
+RUN --mount=type=cache,target=/root/.cache/pip,sharing=private \
+    --mount=type=cache,target=/root/.cache/ccache,sharing=private \
+    env MAKEFLAGS="-j$(nproc)" CC='ccache gcc' \
+      pip install --compile "$(ls dist/*.whl)"[d,uvloop]
+RUN --mount=type=cache,target=/root/.cache/pyinstaller,sharing=private \
+    --mount=type=cache,target=/black/build,sharing=private \
+    env MAKEFLAGS="-j$(nproc)" \
     pyinstaller \
       --clean \
       --onefile \
@@ -40,7 +54,7 @@ RUN env MAKEFLAGS="-j$(nproc)" staticx --strip dist/blackd dist/blackd_static
 FROM gcr.io/distroless/base-debian11
 MAINTAINER 'Byeonghoon Isac Yoo <bhyoo@bhyoo.com>'
 
-COPY --link=true --from=builder /black/dist/blackd_static /usr/local/bin/blackd
+COPY --link --from=builder /black/dist/blackd_static /usr/local/bin/blackd
 EXPOSE 80
 ENTRYPOINT ["/usr/local/bin/blackd"]
 CMD ["--bind-host", "0.0.0.0", "--bind-port", "80"]
