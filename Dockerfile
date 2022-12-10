@@ -16,7 +16,7 @@ RUN --mount=type=cache,target=/root/.cache/pip,sharing=private \
     env MAKEFLAGS="-j$(nproc)" pip install --root-user-action=ignore -U scons wheel pip build
 RUN --mount=type=cache,target=/root/.cache/pip,sharing=private \
     --mount=type=cache,target=/root/.cache/ccache,sharing=private \
-    env MAKEFLAGS="-j$(nproc)" BOOTLOADER_CC='ccache gcc' CC='ccache gcc' \
+    env MAKEFLAGS="-j$(nproc)" CC='ccache gcc' \
       pip install --root-user-action=ignore -U pyinstaller staticx
 
 RUN git clone --depth 1 -b ${VERSION} https://github.com/psf/black.git
