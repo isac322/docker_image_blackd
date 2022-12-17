@@ -2,7 +2,6 @@
 
 FROM python:3.11-slim AS builder
 
-ARG TARGETOS
 ARG TARGETARCH
 ARG VERSION
 
@@ -15,10 +14,10 @@ RUN apt-get install -y --no-install-recommends \
     gcc clang ccache \
     patchelf
 RUN if ! [ "$(uname -m)" = 'x86_64' ]; then apt-get install -y --no-install-recommends zlib1g-dev make; fi
-RUN --mount=type=cache,target=/root/.cache/pip,id=pip-${TARGETOS} \
+RUN --mount=type=cache,target=/root/.cache/pip,id=pip-${TARGETARCH} \
     env MAKEFLAGS="-j$(nproc)" pip install --root-user-action=ignore -U scons wheel pip build
-RUN --mount=type=cache,target=/root/.cache/pip,id=pip-${TARGETOS} \
-    --mount=type=cache,target=/root/.cache/ccache,id=ccache-${TARGETOS} \
+RUN --mount=type=cache,target=/root/.cache/pip,id=pip-${TARGETARCH} \
+    --mount=type=cache,target=/root/.cache/ccache,id=ccache-${TARGETARCH} \
     env MAKEFLAGS="-j$(nproc)" CC='ccache gcc' \
       pip install --root-user-action=ignore -U pyinstaller staticx
 
@@ -29,23 +28,23 @@ RUN sed -iE 's/gitignore: Optional\[PathSpec\] = None/gitignore: Optional[Dict[P
 
 # FIXME: https://github.com/psf/black/issues/3376
 RUN if [ "$(getconf LONG_BIT)" -ne 64 ]; then sed -iE 's/mypy==0.971/mypy==0.981/' pyproject.toml; fi
-RUN --mount=type=cache,target=/root/.cache/pip,id=pip-${TARGETOS} \
-    --mount=type=cache,target=/root/.cache/ccache,id=ccache-${TARGETOS} \
-    --mount=type=cache,target=/black/.mypy_cache,id=mypy-${TARGETOS} \
+RUN --mount=type=cache,target=/root/.cache/pip,id=pip-${TARGETARCH} \
+    --mount=type=cache,target=/root/.cache/ccache,id=ccache-${TARGETARCH} \
+    --mount=type=cache,target=/black/.mypy_cache,id=mypy-${TARGETARCH} \
     env \
       MAKEFLAGS="-j$(nproc)" \
       SETUPTOOLS_SCM_PRETEND_VERSION=${VERSION} \
       HATCH_BUILD_HOOKS_ENABLE=1 \
       MYPYC_OPT_LEVEL=3 MYPYC_DEBUG_LEVEL=0 CC='ccache clang' \
       python -m build --wheel
-RUN --mount=type=cache,target=/root/.cache/pip,id=pip-${TARGETOS} \
-    --mount=type=cache,target=/root/.cache/ccache,id=ccache-${TARGETOS} \
+RUN --mount=type=cache,target=/root/.cache/pip,id=pip-${TARGETARCH} \
+    --mount=type=cache,target=/root/.cache/ccache,id=ccache-${TARGETARCH} \
     env MAKEFLAGS="-j$(nproc)" CC='ccache gcc' \
       pip install --compile "$(ls dist/*.whl)"[d,uvloop]
 
 WORKDIR /root
-RUN --mount=type=cache,target=/root/.cache/pyinstaller,id=pyinstaller-${TARGETOS} \
-    --mount=type=cache,target=/root/build,id=mypy-build-${TARGETOS}  \
+RUN --mount=type=cache,target=/root/.cache/pyinstaller,id=pyinstaller-${TARGETARCH} \
+    --mount=type=cache,target=/root/build,id=mypy-build-${TARGETARCH}  \
     env MAKEFLAGS="-j$(nproc)" \
       pyinstaller \
         --clean  \
