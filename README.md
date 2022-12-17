@@ -9,7 +9,7 @@
 [![PyPI](https://img.shields.io/pypi/v/black?label=black&logo=python&style=flat-square)][2]
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/black?logo=python&style=flat-square)][2]
 [![GitHub last commit (branch)](https://img.shields.io/github/last-commit/isac322/docker_image_blackd/master?logo=github&style=flat-square)][3]
-[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/isac322/docker_image_blackd/publish?logo=github&style=flat-square)][3]
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/isac322/docker_image_blackd/publish.yaml?branch=main&logo=github&style=flat-square)][3]
 [![Dependabpt Status](https://flat.badgen.net/github/dependabot/isac322/docker_image_blackd?icon=github)][3]
 
 > ### Images automatically follow upstream via dependabot.
