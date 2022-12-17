@@ -31,7 +31,7 @@ RUN --mount=type=cache,target=/root/.cache/pip,sharing=private \
     --mount=type=cache,target=/black/.mypy_cache,sharing=private \
     env \
       MAKEFLAGS="-j$(nproc)" \
-      HATCH_BUILD_HOOKS_ENABLE=1 \
+      HATCH_BUILD_HOOKS_ENABLE=1 HATCH_BUILD_CLEAN_HOOKS_AFTER=1 \
       MYPYC_OPT_LEVEL=3 MYPYC_DEBUG_LEVEL=0 CC='ccache clang' \
       python -m build --wheel
 RUN --mount=type=cache,target=/root/.cache/pip,sharing=private \
@@ -51,10 +51,11 @@ RUN --mount=type=cache,target=/root/.cache/pyinstaller,sharing=private \
 RUN env MAKEFLAGS="-j$(nproc)" staticx --strip dist/blackd dist/blackd_static
 
 
-FROM gcr.io/distroless/base-debian11
-MAINTAINER 'Byeonghoon Isac Yoo <bhyoo@bhyoo.com>'
-
-COPY --link --from=builder /black/dist/blackd_static /usr/local/bin/blackd
+FROM gcr.io/distroless/static:nonroot
+USER 65532:65532
 EXPOSE 80
 ENTRYPOINT ["/usr/local/bin/blackd"]
 CMD ["--bind-host", "0.0.0.0", "--bind-port", "80"]
+MAINTAINER 'Byeonghoon Isac Yoo <bhyoo@bhyoo.com>'
+
+COPY --link --from=builder --chown=65532:65532 /black/dist/blackd_static /usr/local/bin/blackd
