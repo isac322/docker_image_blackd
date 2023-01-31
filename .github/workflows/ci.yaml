@@ -62,7 +62,7 @@ jobs:
 
       - name: Build
         if: steps.changed-files.outputs.any_changed == 'true'
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           push: false
           build-args: |
