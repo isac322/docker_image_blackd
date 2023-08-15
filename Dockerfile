@@ -12,7 +12,7 @@ RUN apt-get update -qq
 RUN apt-get install -y --no-install-recommends \
     git \
     gcc clang ccache \
-    patchelf
+    patchelf libnss3-dev
 RUN if ! [ "$(uname -m)" = 'x86_64' ]; then apt-get install -y --no-install-recommends zlib1g-dev make; fi
 RUN --mount=type=cache,target=/root/.cache/pip,id=pip-${TARGETARCH} \
     env MAKEFLAGS="-j$(nproc)" pip install --root-user-action=ignore -U scons wheel pip build
@@ -23,11 +23,7 @@ RUN --mount=type=cache,target=/root/.cache/pip,id=pip-${TARGETARCH} \
 
 RUN git clone --depth 1 -b ${VERSION} https://github.com/psf/black.git
 WORKDIR black
-# FIXME: https://github.com/psf/black/pull/3416
-RUN sed -iE 's/gitignore: Optional\[PathSpec\] = None/gitignore: Optional[Dict[Path, PathSpec]] = None/' src/black/__init__.py
 
-# FIXME: https://github.com/psf/black/issues/3376
-RUN if [ "$(getconf LONG_BIT)" -ne 64 ]; then sed -iE 's/mypy==0.971/mypy==0.981/' pyproject.toml; fi
 RUN --mount=type=cache,target=/root/.cache/pip,id=pip-${TARGETARCH} \
     --mount=type=cache,target=/root/.cache/ccache,id=ccache-${TARGETARCH} \
     --mount=type=cache,target=/black/.mypy_cache,id=mypy-${TARGETARCH} \
