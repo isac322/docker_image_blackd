@@ -1,1 +1,1 @@
-black[d,uvloop]==23.7.0
+black[d,uvloop]==23.10.1
